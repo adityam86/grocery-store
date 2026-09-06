@@ -7,6 +7,10 @@
     "frontend",
     "backend"
   ],
+  "allowScripts": {
+    "esbuild": true,
+    "esbuild@0.21.5": true
+  },
   "scripts": {
     "dev:frontend": "npm run dev --workspace=frontend",
     "dev:backend": "npm run dev --workspace=backend",
