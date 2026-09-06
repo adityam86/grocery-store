@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { ShoppingBag, ArrowLeft, Send, CheckCircle, CreditCard, Landmark, Truck, X } from 'lucide-react';
+import { API_BASE_URL } from '../constants/api';
 
 const CheckoutForm = ({ user, onBack, onOrderSuccess }) => {
   const { cart, cartTotal, clearCart } = useCart();
@@ -115,7 +116,7 @@ const CheckoutForm = ({ user, onBack, onOrderSuccess }) => {
       let paymentStatus = paymentDetails.status || 'Pending';
       
       if (formData.paymentMethod === 'card' && !paymentDetails.id) {
-        const intentRes = await fetch('http://localhost:5000/api/payments/create-intent', {
+        const intentRes = await fetch(`${API_BASE_URL}/api/payments/create-intent`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -132,7 +133,7 @@ const CheckoutForm = ({ user, onBack, onOrderSuccess }) => {
       orderPayload.paymentStatus = paymentStatus;
 
       // 2. Post Order to Backend
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch(`${API_BASE_URL}/api/orders`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -146,7 +147,7 @@ const CheckoutForm = ({ user, onBack, onOrderSuccess }) => {
       if (response.ok && data.success) {
         // 3. Save new address to profile if it's not already saved
         if (user && !savedAddresses.includes(formData.address)) {
-          await fetch('http://localhost:5000/api/auth/address', {
+          await fetch(`${API_BASE_URL}/api/auth/address`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -213,7 +214,7 @@ const CheckoutForm = ({ user, onBack, onOrderSuccess }) => {
   const handleDownloadInvoice = async () => {
     try {
       const token = localStorage.getItem('apna_bazar_token');
-      const response = await fetch(`http://localhost:5000/api/orders/${placedOrder.orderId}/invoice`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${placedOrder.orderId}/invoice`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

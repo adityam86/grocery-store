@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingBag, ArrowLeft, RefreshCw, CheckCircle, Truck, Package, Clock, Check, Download, MapPin } from 'lucide-react';
 import { io } from 'socket.io-client';
+import { API_BASE_URL, SOCKET_URL } from '../constants/api';
 
 const ORDER_STATUS_STEPS = [
   { key: 'Placed', label: 'Placed', icon: Clock },
@@ -24,7 +25,7 @@ const OrderHistory = ({ user, onBack }) => {
     const token = localStorage.getItem('apna_bazar_token');
 
     try {
-      const response = await fetch(`http://localhost:5000/api/orders?userId=${user.id || user._id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders?userId=${user.id || user._id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -52,7 +53,7 @@ const OrderHistory = ({ user, onBack }) => {
   useEffect(() => {
     let socket;
     try {
-      socket = io('http://localhost:5000');
+      socket = io(SOCKET_URL);
       
       orders.forEach(order => {
         if (order.status === 'Out for Delivery') {
@@ -104,7 +105,7 @@ const OrderHistory = ({ user, onBack }) => {
   const handleDownloadInvoice = async (orderId) => {
     try {
       const token = localStorage.getItem('apna_bazar_token');
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/invoice`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/invoice`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

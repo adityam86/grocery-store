@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit3, Trash2, CheckCircle, Package, ArrowLeft, RefreshCw, X, BarChart2 } from 'lucide-react';
 import { fallbackProducts } from '../data/fallbackProducts';
 import { BarChart as RechartsBarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { API_BASE_URL } from '../constants/api';
 
 const AdminDashboard = ({ onBack, currentTheme }) => {
   const [activeTab, setActiveTab] = useState('products');
@@ -29,8 +30,8 @@ const AdminDashboard = ({ onBack, currentTheme }) => {
     setLoading(true);
     const token = localStorage.getItem('apna_bazar_token');
     try {
-      const prodRes = await fetch('http://localhost:5000/api/products');
-      const orderRes = await fetch('http://localhost:5000/api/orders', {
+      const prodRes = await fetch(`${API_BASE_URL}/api/products`);
+      const orderRes = await fetch(`${API_BASE_URL}/api/orders`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -72,7 +73,7 @@ const AdminDashboard = ({ onBack, currentTheme }) => {
 
     try {
       if (isEditing) {
-        const response = await fetch(`http://localhost:5000/api/products/${productForm.id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/products/${productForm.id}`, {
           method: 'PUT',
           headers: { 
             'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ const AdminDashboard = ({ onBack, currentTheme }) => {
         });
         if (!response.ok) throw new Error('Update failed');
       } else {
-        const response = await fetch('http://localhost:5000/api/products', {
+        const response = await fetch(`${API_BASE_URL}/api/products`, {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
@@ -122,7 +123,7 @@ const AdminDashboard = ({ onBack, currentTheme }) => {
     const token = localStorage.getItem('apna_bazar_token');
 
     try {
-      const res = await fetch(`http://localhost:5000/api/products/${productId}`, { 
+      const res = await fetch(`${API_BASE_URL}/api/products/${productId}`, { 
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -139,7 +140,7 @@ const AdminDashboard = ({ onBack, currentTheme }) => {
   const handleStatusChange = async (orderId, newStatus) => {
     const token = localStorage.getItem('apna_bazar_token');
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const response = await fetch(`${API_BASE_URL}/api/orders/${orderId}/status`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',

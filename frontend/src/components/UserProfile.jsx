@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, User, MapPin, Lock, Trash2, Plus, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import { THEMES } from '../App';
+import { API_ENDPOINTS } from '../constants/api';
 
 const UserProfile = ({ user, onBack, onUpdateUser, currentTheme }) => {
   const themeObj = THEMES[currentTheme] || THEMES.saffron;
@@ -39,7 +40,7 @@ const UserProfile = ({ user, onBack, onUpdateUser, currentTheme }) => {
 
     const token = localStorage.getItem('apna_bazar_token');
     try {
-      const res = await fetch('http://localhost:5000/api/auth/profile', {
+      const res = await fetch(API_ENDPOINTS.PROFILE, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +91,7 @@ const UserProfile = ({ user, onBack, onUpdateUser, currentTheme }) => {
 
     const token = localStorage.getItem('apna_bazar_token');
     try {
-      const res = await fetch('http://localhost:5000/api/auth/address', {
+      const res = await fetch(API_ENDPOINTS.ADDRESS, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +139,7 @@ const UserProfile = ({ user, onBack, onUpdateUser, currentTheme }) => {
 
     const token = localStorage.getItem('apna_bazar_token');
     try {
-      const res = await fetch('http://localhost:5000/api/auth/address', {
+      const res = await fetch(API_ENDPOINTS.ADDRESS, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
