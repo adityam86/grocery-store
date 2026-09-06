@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: apnabazar_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - apnabazar_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.server
+    container_name: apnabazar_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/apnabazar
+      - JWT_SECRET=your_jwt_secret_here
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    networks:
+      - apnabazar_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.client
+    container_name: apnabazar_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - apnabazar_network
+
+volumes:
+  mongo_data:
+
+networks:
+  apnabazar_network:
+    driver: bridge
